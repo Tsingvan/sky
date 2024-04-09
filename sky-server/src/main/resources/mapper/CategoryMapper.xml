@@ -22,7 +22,7 @@
         update category
         <set>
             <if test="type != null">
-                type = #{type},
+                type = #{type}, <!--逗号用于分隔不同的列赋值 主要用在updat上-->
             </if>
             <if test="name != null">
                 name = #{name},
