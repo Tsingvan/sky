@@ -11,3 +11,8 @@ sky:
     access-key-id: LTAI5tA46MYbmEdKJXHBBVat
     access-key-secret: N4YpGklKH6z4HncCM1IIXm3kd0gtzR
     bucket-name: sky-lqf
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 10 # 不设置的话默认是0
