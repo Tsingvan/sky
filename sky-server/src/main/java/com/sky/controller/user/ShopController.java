@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+//因为admin中也有ShopController所以Bean的名称冲突 这里是为Bean取别名
 @RestController("userShopController")
 @Api(tags = "店铺营业状态接口")
 @RequestMapping("user/shop")
