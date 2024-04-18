@@ -21,6 +21,8 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
+import io.swagger.util.Json;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -59,6 +61,8 @@ public class OrderServiceImpl implements OrderService {
     private UserMapper userMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 用户下单
@@ -140,6 +144,8 @@ public class OrderServiceImpl implements OrderService {
         Long userId = BaseContext.getCurrentId();
         User user = userMapper.getByOpenid(String.valueOf(userId));
 
+        //获取订单 用于后续的语音播报
+        Orders orders = orderMapper.getByNumberAndUserId(ordersPaymentDTO.getOrderNumber(), userId);
 
         //调用微信支付接口，生成预支付交易单
 //        JSONObject jsonObject = weChatPayUtil.pay(
@@ -171,6 +177,17 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.updateStatus(OrderStatus, OrderPaidStatus, check_out_time, ordersPaymentDTO.getOrderNumber());
 
+        //////////////////////////////////////////////
+        Map map = new HashMap();
+        map.put("type", 1);//消息类型，1表示来单提醒
+        map.put("orderId", orders.getId());
+        map.put("content", "订单号：" + ordersPaymentDTO.getOrderNumber());
+
+        //通过WebSocket实现来单提醒，向客户端浏览器推送消息
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+        ///////////////////////////////////////////////////
+
+
         return vo;
     }
 
@@ -197,6 +214,16 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+
+        /////////////////////////////
+//        Map map = new HashMap();
+//        map.put("type", 1);
+//        map.put("orderId", ordersDB.getId());
+//        map.put("content", "订单号" + outTradeNo);
+//
+//        String jsonString = JSON.toJSONString(map);
+//        webSocketServer.sendToAllClient(jsonString);
+
     }
 
     /**
