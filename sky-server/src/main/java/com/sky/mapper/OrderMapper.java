@@ -7,8 +7,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -61,4 +63,10 @@ public interface OrderMapper {
 
     @Select("select * from orders where status = #{status} and order_time < #{time}")
     List<Orders> getByStatusAndOrdertimeLT(Integer status, LocalDateTime time);
+
+    /**
+     * 根据动态条件统计营业额
+     * @param map
+     */
+    BigDecimal sumByMap(Map map);
 }
