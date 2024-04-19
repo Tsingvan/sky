@@ -69,4 +69,6 @@ public interface OrderMapper {
      * @param map
      */
     BigDecimal sumByMap(Map map);
+
+    Integer getOrderCount(Map map);
 }
