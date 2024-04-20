@@ -69,7 +69,7 @@ public interface OrderMapper {
      * 根据动态条件统计营业额
      * @param map
      */
-    BigDecimal sumByMap(Map map);
+    Double sumByMap(Map map);
 
     Integer getOrderCount(Map map);
 
@@ -80,4 +80,6 @@ public interface OrderMapper {
      * @return
      */
     List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
+
+
 }

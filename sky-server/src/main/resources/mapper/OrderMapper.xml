@@ -72,7 +72,7 @@
         order by order_time desc
     </select>
 
-    <select id="sumByMap" resultType="java.math.BigDecimal">
+    <select id="sumByMap" resultType="double">
         select sum(amount) from orders
         <where>
             <if test="status != null">
@@ -116,4 +116,7 @@
         order by number desc
         limit 0, 10
     </select>
+
+
+
 </mapper>
